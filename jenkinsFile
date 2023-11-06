@@ -1,27 +1,24 @@
 pipeline {
+
 	agent any
-	stages{
+	stages{   
 		stage(clean){
 			steps{
-				sh 'mvn clean'
+				    sh 'mvn clean'
 			}
+			
 		}
+		
 		stage(install){
 			steps{
-				sh 'mvn install'
+				    sh 'mvn install'
+			     
+			}
+			post{
+			    always{
+			        archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
+			    }
 			}
 		}
-		post{
-			always{
-				archiveArtifacts artifacts: 'target/**.jar', followSymlinks: false
-				junit 'target/surefire-reports/*.xml'
-			}
-		}
-		}
-		stage('clean ws'){
-			steps{
-				cleanWs()
-			}
-		}
+	    }
 	}
-
